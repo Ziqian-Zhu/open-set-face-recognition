@@ -1,0 +1,8 @@
+{
+  "split": "test",
+  "note": "示例不是实测标注。frame必须覆盖导出JSONL中的全部frame记录，box是原视频像素[x,y,w,h]；不同未知人员也要使用不同subject。",
+  "frames": [
+    {"frame": 0, "faces": [{"subject": "person_1", "label": "人员A", "box": [100, 80, 120, 160]}, {"subject": "visitor_1", "label": null, "box": [400, 80, 120, 160]}]},
+    {"frame": 3, "faces": [{"subject": "person_1", "label": "人员A", "box": [110, 80, 120, 160]}, {"subject": "visitor_1", "label": null, "box": [390, 80, 120, 160]}]}
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "id": "meglass-mixed-budget-completion-exploratory-v1",
+  "scope": "secondary K=5 completion and exact-search implementation regression on previously viewed public crops; NOT new blind evidence",
+  "parent_protocol": "meglass_mixed_v1.json",
+  "input_policy": "reuse the exact gallery/validation/test manifests of protocol-mixed-v1-registered-seed42; no new filtering or resampling",
+  "experiment": {
+    "budgets": [1, 2, 3, 5],
+    "random_baseline_seeds": [42, 43, 44],
+    "margin_candidates": [0, 0.02, 0.04, 0.06],
+    "empirical_validation_fpir_target": 0.05,
+    "primary_comparison": {
+      "budget": 3,
+      "selection": "coverage",
+      "comparator": "first",
+      "aggregation": "top3_median",
+      "random_seed": 42,
+      "metric": "test known correct identification / all known attempts",
+      "safety_metric": "test unknown false accepts / usable unknown faces, with Wilson interval"
+    },
+    "new_budget_interpretation": "K=5 is secondary descriptive analysis only, never replace the original K=3 primary comparison based on test outcomes",
+    "regression_gate": "all original 126 variants must retain exact selected hashes, validation thresholds/margins and test identification counts"
+  },
+  "limitations": [
+    "Protocol was extended after original K=1/2/3 results were viewed; this is not historical preregistration.",
+    "Six gallery candidates per identity permit K=5 without adding or duplicating any photo.",
+    "Capture-session metadata is absent; the original crop/identity-preflight/dHash selection biases remain.",
+    "The extension is not evidence of camera generalization or low population FAR."
+  ]
+}

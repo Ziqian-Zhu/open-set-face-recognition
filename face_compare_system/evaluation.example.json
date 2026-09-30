@@ -1,0 +1,21 @@
+{
+  "split": "test",
+  "gallery": [
+    {"image": "evaluation_data/enroll/a1.jpg", "label": "人员A"},
+    {"image": "evaluation_data/enroll/a2.jpg", "label": "人员A"},
+    {"image": "evaluation_data/enroll/a3.jpg", "label": "人员A"},
+    {"image": "evaluation_data/enroll/b1.jpg", "label": "人员B"},
+    {"image": "evaluation_data/enroll/b2.jpg", "label": "人员B"},
+    {"image": "evaluation_data/enroll/b3.jpg", "label": "人员B"},
+    {"image": "evaluation_data/enroll/c1.jpg", "label": "人员C"},
+    {"image": "evaluation_data/enroll/c2.jpg", "label": "人员C"},
+    {"image": "evaluation_data/enroll/c3.jpg", "label": "人员C"}
+  ],
+  "probes": [
+    {"image": "evaluation_data/test/a-normal.jpg", "label": "人员A", "condition": "正常光"},
+    {"image": "evaluation_data/test/b-turn.jpg", "label": "人员B", "condition": "轻微转头"},
+    {"image": "evaluation_data/test/c-dim.jpg", "label": "人员C", "condition": "暗光"},
+    {"image": "evaluation_data/test/unknown-1.jpg", "label": null, "condition": "正常光"},
+    {"image": "evaluation_data/test/unknown-2.jpg", "label": null, "condition": "正常光"}
+  ]
+}

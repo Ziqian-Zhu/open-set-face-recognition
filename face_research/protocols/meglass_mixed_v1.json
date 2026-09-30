@@ -1,0 +1,53 @@
+{
+  "id": "meglass-balanced-mixed-open-set-exploratory-v1",
+  "frozen_before_test_evaluation": true,
+  "scope": "exploratory public 120x120 crops; not an official MeGlass benchmark or independent camera test",
+  "source_labels": {
+    "glasses": "MeGlass meta.txt flag 1: black eyeglasses",
+    "no_glasses": "MeGlass meta.txt flag 0: no eyeglasses"
+  },
+  "split": {
+    "seed": 42,
+    "known_identities": 12,
+    "unknown_validation_identities": 20,
+    "unknown_test_identities": 20,
+    "unknown_validation_and_test_identities_disjoint": true,
+    "gallery_per_known_identity": {"glasses": 3, "no_glasses": 3},
+    "validation_per_known_identity": {"glasses": 1, "no_glasses": 1},
+    "test_per_known_identity": {"glasses": 1, "no_glasses": 1},
+    "unknown_probes_per_condition_per_split": 10,
+    "gallery_order": "seeded shuffle of all six candidates, independent of condition",
+    "source_photo_id_cross_split_reuse": "reject",
+    "near_duplicate_cross_split": "reject entire known identity at dHash Hamming distance <= 4"
+  },
+  "enrollment": {
+    "single_image_quality": "production YuNet/SFace configuration",
+    "identity_set_consistency": "production validation on all six gallery images",
+    "cross_identity_conflict": "production enrollment in isolated temporary SQLite",
+    "accepted_candidate_cap_per_condition": 8,
+    "do_not_relax_quality_for_public_crops": true
+  },
+  "experiment": {
+    "budgets": [1, 2, 3],
+    "random_baseline_seeds": [42, 43, 44],
+    "margin_candidates": [0, 0.02, 0.04, 0.06],
+    "empirical_validation_fpir_target": 0.05,
+    "primary_comparison": {
+      "budget": 3,
+      "selection": "coverage",
+      "comparator": "first",
+      "aggregation": "top3_median",
+      "random_seed": 42,
+      "metric": "test known correct identification / all known attempts",
+      "safety_metric": "test unknown false accepts / usable unknown faces, with Wilson interval"
+    },
+    "other_methods_budgets_and_aggregations": "secondary descriptive analyses only"
+  },
+  "limitations": [
+    "No trustworthy capture-session IDs; source photo IDs are not sessions.",
+    "dHash curation reads selected held-out image pixels, so this is not a fully sealed blind test.",
+    "The enrollment and near-duplicate gates select a nonrandom subset of identities.",
+    "Twenty unknown test identities cannot establish a low population FPIR.",
+    "Black eyeglasses do not represent every eyewear type, and crops do not represent live camera capture."
+  ]
+}

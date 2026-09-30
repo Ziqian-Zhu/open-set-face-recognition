@@ -1,0 +1,12 @@
+{
+  "id": "posthoc-fixed-pairs-acquisition-diagnostics-v1",
+  "scope": "diagnosis of previously evaluated pairs, not new blind evidence or model tuning",
+  "threshold_policy": "reuse baseline validation-frozen threshold exactly; never recalibrate",
+  "input_policy": "same config, models, manifests and all pairs; fail if scored records differ from baseline",
+  "image_counting": "unique decoded image per split; no duplicate counting from genuine/impostor reuse",
+  "failure_policy": "first observed terminal stage; quality reason counts may overlap; no downstream inference after rejection",
+  "conditions": ["glasses", "no_glasses", "unspecified"],
+  "bootstrap": {"seed": 20260926, "iterations": 2000, "minimum_components": 20},
+  "grouping": "connected components of shared subject IDs across genuine and impostor pairs",
+  "limitations": ["known test reuse; no session-independence claim", "no causal glasses effect or low-FAR guarantee", "no source image, embedding, source subject name, or local path in outputs"]
+}

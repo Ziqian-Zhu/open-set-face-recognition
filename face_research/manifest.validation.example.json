@@ -1,0 +1,24 @@
+{
+  "split": "validation",
+  "gallery": [
+    {"image": "data/gallery/A/01.jpg", "label": "A", "condition": "glasses", "session_id": "A-gallery"},
+    {"image": "data/gallery/A/02.jpg", "label": "A", "condition": "glasses", "session_id": "A-gallery"},
+    {"image": "data/gallery/A/03.jpg", "label": "A", "condition": "no_glasses", "session_id": "A-gallery"},
+    {"image": "data/gallery/A/04.jpg", "label": "A", "condition": "no_glasses", "session_id": "A-gallery"},
+    {"image": "data/gallery/B/01.jpg", "label": "B", "condition": "glasses", "session_id": "B-gallery"},
+    {"image": "data/gallery/B/02.jpg", "label": "B", "condition": "glasses", "session_id": "B-gallery"},
+    {"image": "data/gallery/B/03.jpg", "label": "B", "condition": "no_glasses", "session_id": "B-gallery"},
+    {"image": "data/gallery/B/04.jpg", "label": "B", "condition": "no_glasses", "session_id": "B-gallery"},
+    {"image": "data/gallery/C/01.jpg", "label": "C", "condition": "glasses", "session_id": "C-gallery"},
+    {"image": "data/gallery/C/02.jpg", "label": "C", "condition": "glasses", "session_id": "C-gallery"},
+    {"image": "data/gallery/C/03.jpg", "label": "C", "condition": "no_glasses", "session_id": "C-gallery"},
+    {"image": "data/gallery/C/04.jpg", "label": "C", "condition": "no_glasses", "session_id": "C-gallery"}
+  ],
+  "probes": [
+    {"image": "data/validation/A/01.jpg", "label": "A", "condition": "no_glasses", "session_id": "A-validation"},
+    {"image": "data/validation/B/01.jpg", "label": "B", "condition": "glasses", "session_id": "B-validation"},
+    {"image": "data/validation/C/01.jpg", "label": "C", "condition": "no_glasses", "session_id": "C-validation"},
+    {"image": "data/validation/unknown/U-val-1/01.jpg", "label": null, "subject_id": "U-val-1", "condition": "normal", "session_id": "U-val-1-validation"},
+    {"image": "data/validation/unknown/U-val-2/01.jpg", "label": null, "subject_id": "U-val-2", "condition": "normal", "session_id": "U-val-2-validation"}
+  ]
+}

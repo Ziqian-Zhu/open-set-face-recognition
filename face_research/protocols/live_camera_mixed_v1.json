@@ -1,0 +1,34 @@
+{
+  "id": "consented-live-camera-mixed-open-set-v1",
+  "purpose": "independent-session local-camera follow-up, separate from public MeGlass data",
+  "profiles": {
+    "pilot": {"known": 3, "unknown_validation": 2, "unknown_test": 2, "interpretation": "pipeline check only; no population performance claim"},
+    "extended": {"known": 12, "unknown_validation": 20, "unknown_test": 20, "interpretation": "descriptive evaluation, still too small for a low-FPIR guarantee"}
+  },
+  "per_known_identity": {
+    "gallery": {"glasses": 3, "no_glasses": 3},
+    "validation": {"glasses": 1, "no_glasses": 1},
+    "test": {"glasses": 1, "no_glasses": 1},
+    "session_requirement": "one real capture session per split, three distinct sessions; ideally different days and lighting"
+  },
+  "unknown_identities": "validation and test people must be different and absent from gallery; one probe each, balanced across the two appearance conditions",
+  "camera": "computer's built-in camera, uncropped full frames; no face images or embeddings uploaded",
+  "consent": "obtain and document each person's informed permission; the CSV attestation cannot itself prove consent",
+  "primary_comparison": {
+    "budget": 3,
+    "selection": "coverage",
+    "comparator": "first",
+    "aggregation": "top3_median",
+    "random_seed": 42,
+    "empirical_validation_fpir_target": 0.05,
+    "metric": "known correct identification / all known attempts",
+    "safety_metric": "unknown false accepts / usable unknown faces with Wilson interval"
+  },
+  "leakage_rules": [
+    "No source image path reused across gallery, validation, and test.",
+    "For each known identity, session IDs must be different across the three splits.",
+    "Unknown validation and unknown test identities must be disjoint.",
+    "Do not choose or recapture test frames based on model quality or recognition output.",
+    "No test scores may change thresholds, margins, K, or the selection rule."
+  ]
+}

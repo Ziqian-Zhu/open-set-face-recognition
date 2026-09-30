@@ -1,0 +1,18 @@
+.venv/
+.venv-ui/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.DS_Store
+
+# Enrolled faces/features and recognition logs are personal data.
+data/*
+!data/.gitkeep
+logs/*
+!logs/.gitkeep
+data_sface/
+evaluation_data/
+evaluation_results/
+models/*.onnx
+models/*.download
+.qa/

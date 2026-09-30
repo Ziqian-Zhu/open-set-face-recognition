@@ -1,0 +1,65 @@
+{
+  "camera": {
+    "preferred_index": 0,
+    "scan_count": 6,
+    "width": 1280,
+    "height": 720,
+    "fps": 30
+  },
+  "detection": {
+    "scale_factor": 1.1,
+    "min_neighbors": 5,
+    "min_face_pixels": 80,
+    "use_profile_detector": true,
+    "padding_ratio": 0.14
+  },
+  "feature": {
+    "image_size": 128,
+    "grid_rows": 8,
+    "grid_columns": 8,
+    "radii": [1, 2]
+  },
+  "quality": {
+    "min_brightness": 45.0,
+    "max_brightness": 220.0,
+    "min_contrast": 22.0,
+    "min_blur_variance": 55.0,
+    "min_face_ratio": 0.035,
+    "focus_method": "regional",
+    "min_focus_score": 0.3,
+    "min_gradient_energy": 16.0
+  },
+  "recognition": {
+    "default_distance_threshold": 0.43,
+    "threshold_min": 0.2,
+    "threshold_max": 0.62,
+    "ambiguity_margin": 0.025,
+    "nearest_samples": 3,
+    "vote_window": 7,
+    "vote_min_frames": 4,
+    "vote_required_ratio": 0.6
+  },
+  "storage": {
+    "backend": "sqlite",
+    "database_directory": "data_sface",
+    "event_log": "logs/events.jsonl",
+    "save_face_images": true
+  },
+  "engine": {
+    "backend": "sface",
+    "model_directory": "models",
+    "detection_score": 0.9,
+    "max_detection_side": 640,
+    "cosine_threshold": 0.45,
+    "cosine_margin": 0.08,
+    "enrollment_consistency": 0.45
+  },
+  "ui": {
+    "title": "智能人脸比对系统",
+    "process_every_n_frames": 3,
+    "preview_width": 960,
+    "preview_height": 640,
+    "enrollment_target_samples": 5,
+    "reduce_motion": false
+  }
+}

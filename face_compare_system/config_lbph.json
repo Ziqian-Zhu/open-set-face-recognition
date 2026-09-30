@@ -1,0 +1,5 @@
+{
+  "camera": {"preferred_index": 0},
+  "engine": {"backend": "lbph"},
+  "storage": {"database_directory": "data", "event_log": "logs/lbph_events.jsonl", "save_face_images": true}
+}

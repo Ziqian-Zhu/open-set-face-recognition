@@ -1,0 +1,23 @@
+{
+  "split": "validation",
+  "pairs": [
+    {
+      "left_image": "data/validation/A/session-1/01.jpg",
+      "right_image": "data/validation/A/session-2/01.jpg",
+      "left_subject_id": "A",
+      "right_subject_id": "A",
+      "left_session_id": "A-validation-session-1",
+      "right_session_id": "A-validation-session-2",
+      "genuine": true
+    },
+    {
+      "left_image": "data/validation/unknown/U-val-1/01.jpg",
+      "right_image": "data/validation/A/session-2/01.jpg",
+      "left_subject_id": "U-val-1",
+      "right_subject_id": "A",
+      "left_session_id": "U-val-1-validation",
+      "right_session_id": "A-validation-session-2",
+      "genuine": false
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+# Local Python environments and generated files
+.venv/
+.venv-*/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.DS_Store
+
+# Local document rendering and course source documents
+.docx_work/
+.docx_qa/
+*.docx
+
+# Credentials and private configuration
+.env
+.env.*
+*.pem
+*.key
+
+# Enrolled faces, embeddings, logs, downloaded datasets, and experiment outputs
+face_compare_system/data/
+face_compare_system/data_sface/
+face_compare_system/logs/
+face_compare_system/evaluation_data/
+face_compare_system/evaluation_results/
+face_compare_system/models/*.onnx
+face_compare_system/models/*.download
+face_research/data/
+face_research/results/
+*.sqlite3*
+*.jsonl
+*.npy
+*.npz
+*.jpg
+*.jpeg
+*.png
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.csv
