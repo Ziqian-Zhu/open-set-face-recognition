@@ -1,18 +1,19 @@
-# Open-set Multi-face Recognition System
+# 开放集多人脸识别与模板选样
 
-## 项目简介 | Project Overview
+[![简体中文（当前）](https://img.shields.io/badge/%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-%E5%BD%93%E5%89%8D-0F766E?style=for-the-badge)](./README.md)
+[![Switch to English](https://img.shields.io/badge/English-Read-52677A?style=for-the-badge)](./README.en.md)
 
-**中文：** 这是一个面向计算机视觉工程实践的开放集多人脸识别与有限模板选样项目。`face_compare_system` 提供本地 CPU 桌面应用：YuNet 检测与五点对齐、SFace 特征、画质门禁、SQLite 精确检索、身份级多模板聚合、未知/歧义拒识和逐轨迹多帧确认。`face_research` 提供可复现的选样、阈值校准、评估与性能实验。YuNet 和 SFace 是预训练模型；本项目的贡献是系统设计、判定与检索实现及实验协议，不宣称发明新网络，也不具备活体检测或工业级身份认证保证。
+## 项目简介
 
-**English:** An engineering project combining open-set multi-face recognition with research on template selection under a limited budget. `face_compare_system` is a local, CPU-based desktop application with YuNet detection and five-point alignment, SFace embeddings, quality gates, exact SQLite retrieval, identity-level multi-template aggregation, unknown/ambiguous-identity rejection, and per-track temporal confirmation. `face_research` provides reproducible template-selection, threshold-calibration, evaluation, and performance experiments. YuNet and SFace are pretrained models; the contributions here are the system design, decision and retrieval implementation, and evaluation protocol—not a new neural network. Liveness detection and industrial-grade identity assurance are not claimed.
+这是一个面向计算机视觉工程实践的开放集多人脸识别与有限模板选样项目。`face_compare_system` 提供本地 CPU 桌面应用：YuNet 检测与五点对齐、SFace 特征、画质门禁、SQLite 精确检索、身份级多模板聚合、未知/歧义拒识和逐轨迹多帧确认。`face_research` 提供可复现的选样、阈值校准、评估与性能实验。YuNet 和 SFace 是预训练模型；本项目的贡献是系统设计、判定与检索实现及实验协议，不宣称发明新网络，也不具备活体检测或工业级身份认证保证。
 
-## 三个核心问题 | Three Core Questions
+## 三个核心问题
 
-1. **开放集身份识别 / Open-set identity recognition：** 摄像头里的人不一定在库中。最佳候选还必须通过距离阈值和 Top1/Top2 身份间隔；取最近邻并不代表可以接受。A person in view may be absent from the gallery; the nearest candidate is accepted only after the distance threshold and top-two identity margin checks.
-2. **鲁棒多模板匹配 / Robust multi-template matching：** 同一人有外观变化。保留多个模板、质量门禁和按身份聚合，再做轨迹独立确认；这些机制有拒绝/延迟代价，不保证只带来收益。Multiple templates, quality gates, per-identity aggregation, and independent track confirmation handle appearance changes, but can increase rejection or confirmation delay.
-3. **有限预算模板选样 / Template selection under a limited budget：** 每人 N 个合格候选，只保留 K 个时，比较 First-K、Random、Quality、Diversity 与质量－覆盖－一致性选样，并用验证集校准各自工作点。When only K of N eligible images per identity can be retained, the research module compares selection strategies and calibrates their operating points on validation data.
+1. **开放集身份识别：** 摄像头里的人不一定在库中。最佳候选还必须通过距离阈值和 Top1/Top2 身份间隔；取最近邻并不代表可以接受。
+2. **鲁棒多模板匹配：** 同一人有外观变化。保留多个模板、质量门禁和按身份聚合，再做轨迹独立确认；这些机制有拒绝/延迟代价，不保证只带来收益。
+3. **有限预算模板选样：** 每人 N 个合格候选，只保留 K 个时，比较 First-K、Random、Quality、Diversity 与质量－覆盖－一致性选样，并用验证集校准各自工作点。
 
-## Architecture
+## 系统流程
 
 ```text
 Camera / Video → YuNet (boxes + 5 landmarks) → Quality gate
