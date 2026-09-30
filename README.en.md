@@ -19,6 +19,18 @@ The project connects **face detection → landmark alignment → quality checks 
 - **Local storage and retrieval optimization:** SQLite stores people and embeddings; caching and batched exact search avoid repeated work as the gallery grows. Inference prioritizes recent frames, and the recognition pipeline can run locally on a CPU.
 - **Separate research and evaluation module:** `face_research` compares template-selection strategies and provides entry points for threshold calibration, model comparison, and performance tests. Keeping experiments separate from the application makes the system easier to reproduce, analyze, and extend.
 
+### Quantified Comparisons
+
+Compared with a single-image, nearest-neighbor demo, this project adds quality gates, unknown-identity rejection, independent multi-face tracks, and multi-frame confirmation. Those are **functional design differences**, not a measured accuracy ranking against third-party systems. The numbers below compare implementations and operating points within this project.
+
+| Comparison | Result | Scope |
+| --- | --- | --- |
+| Earlier per-identity scalar aggregation → grouped batched exact retrieval | With 1,000 synthetic identities × 3 templates each, retrieval p50 fell from **9.381 to 0.289 ms (32.44× faster)**. Full scores and rankings matched across 1,200 queries, as did 36,000 final decisions. [Final acceptance review](FINAL_AUDIT_V2.md) (Chinese) | Retrieval latency only—not camera FPS or recognition-accuracy improvement. |
+| Earlier Laplacian blur threshold → regional, noise-corrected quality measure | On the same public sample after contrast reduction, the old variance **42.62 < 55** caused rejection; the new detail score **0.676 > 0.30** passed, while a simulated blurred image still failed at **0.103 < 0.30**. [Quality regression record](face_compare_system/验证记录.md) (Chinese) | A public-image and synthetic-degradation regression case, not proof of a higher live-person enrollment rate. |
+| Fixed engineering threshold → validation-only calibrated threshold | In an exploratory public glasses/no-glasses **1:1** test, accepted usable genuine pairs increased from **78/89 to 88/89**; across all genuine attempts, the result was **88/200**. [Pair verification](face_research/VERIFICATION_RESULTS.md) (Chinese) | Not evidence of improved production 1:N recognition. Only 44 usable impostor pairs were available, too few to establish low false-accept risk. |
+
+The engineering regression suite passed **454/454 tests**, including open-set boundaries, multi-face tracking, database behavior, and retrieval equivalence. See the [acceptance review](FINAL_AUDIT_V2.md) (Chinese) for scope. Limited-budget template selection remains a research comparison: the custom Coverage strategy did **not** beat the First-K baseline (13/24 versus 14/24), so it is not presented as an accuracy gain. See [selection results](face_research/P2_RETRIEVAL_RESULTS.md) (Chinese).
+
 ## Quick Start
 
 Requires Python 3.10+ and Tk 8.6+; a camera is needed for the live demo. From the repository root (macOS / Linux):
