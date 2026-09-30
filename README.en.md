@@ -5,15 +5,19 @@
 
 ## Overview
 
-A local face-recognition project built with Python and OpenCV. It recognizes multiple people in camera or video footage and can reject unknown or ambiguous identities. The repository contains a desktop application, `face_compare_system`, and an experiment module, `face_research`. It uses pretrained YuNet and SFace models; the focus is on the recognition pipeline, open-set decisions, and engineering implementation.
+This is a local, open-set face-recognition project built with Python and OpenCV for live camera feeds and local video. Rather than simply returning the closest face in a gallery, it asks whether that person is enrolled, whether the image quality is sufficient, and whether the result needs more frames before confirmation. When several people appear together, each face and its track are handled independently.
+
+The project connects **face detection → landmark alignment → quality checks → feature extraction → vector retrieval → open-set decision → multi-frame confirmation** in an interactive desktop application. `face_compare_system` handles enrollment, live recognition, video playback, and local data management. `face_research` studies template selection under limited sample budgets, threshold calibration, and performance trade-offs. YuNet and SFace are pretrained models; the contribution here is the complete, interpretable, and testable system built around them.
 
 ## Highlights
 
-- **End-to-end vision pipeline:** YuNet detects faces and five landmarks; alignment and quality checks precede SFace feature extraction and identity matching.
-- **Open-set, multi-face recognition:** A distance threshold, top-two identity margin, and per-track multi-frame confirmation keep unknown or ambiguous faces rejected or pending.
-- **More robust enrollment:** Multiple samples per person, blur/exposure and duplicate checks, and support for enrolling the same person both with and without glasses.
-- **Local vector retrieval:** SQLite stores face embeddings; caching and batched exact search reduce matching overhead across many identities. Recognition runs locally on the CPU.
-- **Reproducible experiments:** `face_research` supports template selection, threshold calibration, model comparisons, and performance evaluation to study design trade-offs.
+- **Complete path from frame to embedding:** YuNet detects multiple faces and five landmarks in each frame. After alignment and quality checks, SFace extracts embeddings for comparison. Detection and quality failures are handled separately instead of being mislabeled as unknown identities.
+- **Open-set decisions beyond nearest neighbor:** Distances from multiple templates are aggregated by identity. The best identity must pass both a distance threshold and a margin against the runner-up; missing or ambiguous identities can remain rejected or pending.
+- **Independent tracks and temporal confirmation:** Position and appearance cues associate faces across frames. Each track accumulates its own recognition evidence, so a single unstable frame does not immediately confirm an identity.
+- **Enrollment designed for appearance changes:** A person can have multiple templates, including samples with and without glasses. Blur, brightness, duplicate captures, and identity conflicts are checked before samples enter the gallery.
+- **Practical desktop workflow:** The application provides camera selection, live preview, collection progress, person management, and local video playback. Unknown, pending, and low-quality states are presented separately instead of collapsing all failures into one label.
+- **Local storage and retrieval optimization:** SQLite stores people and embeddings; caching and batched exact search avoid repeated work as the gallery grows. Inference prioritizes recent frames, and the recognition pipeline can run locally on a CPU.
+- **Separate research and evaluation module:** `face_research` compares template-selection strategies and provides entry points for threshold calibration, model comparison, and performance tests. Keeping experiments separate from the application makes the system easier to reproduce, analyze, and extend.
 
 ## Quick Start
 
