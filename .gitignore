@@ -39,3 +39,6 @@ face_research/results/
 *.avi
 *.mkv
 *.csv
+
+# Public, privacy-reviewed documentation assets
+!docs/assets/*.png

@@ -72,4 +72,4 @@ face_compare_system/.venv-ui/bin/python -m face_research --matrix \
 - `check_startup.py` 在正常桌面通过，临时库、未开启相机。沙盒内 Tk 缩放读数失败，换桌面环境验证，不修改应用逻辑绕过。
 - 上述三个新结果目录均通过 `verify_result_directory`；历史 run 保留不覆盖。
 
-完整目标尚未关闭：公开 1:1 验证、P2-1 模型接口/许可/对照等仍须按 [逐项核验表](../COMPLETION_AUDIT.md) 继续检查；不因这一性能结果把整个改造计划标成完成。
+完整目标尚未关闭：公开 1:1 验证、P2-1 模型接口/许可/对照等仍须按 [逐项核验表](../docs/audits/COMPLETION_AUDIT.md) 继续检查；不因这一性能结果把整个改造计划标成完成。

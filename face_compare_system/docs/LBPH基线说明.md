@@ -37,7 +37,7 @@ python main.py
 
 macOS 第一次启动摄像头时，请允许 Terminal、Python 或 Codex 使用相机。外置摄像头通常为索引 `1`，内置摄像头通常为索引 `0`；实际顺序取决于操作系统。界面会扫描索引 0–5，并优先选中 `config.json` 中的 `preferred_index`。
 
-详细演示步骤见 [操作手册.md](操作手册.md)。
+详细演示步骤见 [旧版操作手册.md](旧版操作手册.md)。
 
 ## 建议验收流程
 
@@ -96,7 +96,7 @@ face_compare_system/
 ├── main.py                    # GUI 入口
 ├── config.json                # 所有可调参数
 ├── requirements.txt
-├── 操作手册.md
+├── 旧版操作手册.md
 ├── face_compare/
 │   ├── camera.py              # 摄像头发现与生命周期
 │   ├── config.py              # 强类型配置与校验

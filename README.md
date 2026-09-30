@@ -2,6 +2,11 @@
 
 [![简体中文（当前）](https://img.shields.io/badge/%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-%E5%BD%93%E5%89%8D-0F766E?style=for-the-badge)](./README.md)
 [![Switch to English](https://img.shields.io/badge/English-Read-52677A?style=for-the-badge)](./README.en.md)
+[![Tests](https://github.com/Ziqian-Zhu/open-set-face-recognition/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/Ziqian-Zhu/open-set-face-recognition/actions/workflows/tests.yml)
+
+![人脸识别工作台界面预览](docs/assets/app-preview.png)
+
+*临时空库的实际运行界面；摄像头未开启，不包含真人照片、姓名或人脸向量。*
 
 ## 项目简介
 
@@ -25,21 +30,19 @@
 
 | 对照 | 结果 | 边界 |
 | --- | --- | --- |
-| 旧版逐身份标量聚合 → 分组批量精确检索 | 1,000 个合成身份 × 每人 3 个模板，检索 p50 **9.381 → 0.289 ms，提速 32.44×**；1,200 次查询的完整分数和排名一致，36,000 次最终判定一致。[最终复验](FINAL_AUDIT_V2.md) | 这是检索耗时，不是相机帧率或识别准确率提升。 |
+| 旧版逐身份标量聚合 → 分组批量精确检索 | 1,000 个合成身份 × 每人 3 个模板，检索 p50 **9.381 → 0.289 ms，提速 32.44×**；1,200 次查询的完整分数和排名一致，36,000 次最终判定一致。[最终复验](docs/audits/FINAL_AUDIT_V2.md) | 这是检索耗时，不是相机帧率或识别准确率提升。 |
 | 旧 Laplacian 模糊门槛 → 分区、噪声校正的画质指标 | 同一公开样例降对比度后，旧方差 **42.62 < 55** 被拒；新细节分 **0.676 > 0.30** 通过，而模拟失焦图 **0.103 < 0.30** 仍被拒。[质量回归记录](face_compare_system/验证记录.md) | 这是公开图和合成退化的回归案例，不等于真人采集通过率提升。 |
 | 固定工程阈值 → 仅用验证集校准的阈值 | 公开戴镜／摘镜 **1:1** 测试中，可用同人配对接受数 **78/89 → 88/89**；按全部同人尝试为 **88/200**。[配对验证](face_research/VERIFICATION_RESULTS.md) | 这是探索性 1:1 对照，不代表线上多人 1:N 效果；测试可用异人仅 44 组，无法证明低误接风险。 |
 
-工程回归测试 **454/454 通过**，覆盖开放集边界、多人轨迹、数据库与检索一致性等。[验收记录](FINAL_AUDIT_V2.md) 有完整范围。有限模板选样属于研究模块：目前自定义 Coverage 策略没有超过 First-K 基线（13/24 对 14/24），因此不把它包装成精度提升。[选样结果](face_research/P2_RETRIEVAL_RESULTS.md)
+工程回归测试 **454/454 通过**，覆盖开放集边界、多人轨迹、数据库与检索一致性等。[验收记录](docs/audits/FINAL_AUDIT_V2.md) 有完整范围。有限模板选样属于研究模块：目前自定义 Coverage 策略没有超过 First-K 基线（13/24 对 14/24），因此不把它包装成精度提升。[选样结果](face_research/P2_RETRIEVAL_RESULTS.md)
 
 ## 启动方式
 
 需要 Python 3.10+ 和 Tk 8.6+；摄像头演示还需要可用相机。在仓库根目录运行（macOS / Linux）：
 
 ```bash
-python3 -m venv face_compare_system/.venv-ui
-face_compare_system/.venv-ui/bin/python -m pip install -r face_compare_system/requirements.txt
-face_compare_system/.venv-ui/bin/python face_compare_system/scripts/download_models.py
-face_compare_system/.venv-ui/bin/python face_compare_system/main.py
+make bootstrap
+make run
 ```
 
-首次运行会下载并校验模型文件；之后识别可离线进行。启动后打开摄像头，先录入人员，再进行识别。更多安装与操作说明见 [应用指南](face_compare_system/README.md)。
+`make bootstrap` 会创建隔离环境、安装依赖并下载及校验模型；之后识别可离线进行。启动后打开摄像头，先录入人员，再进行识别。完整命令、Windows 安装与操作说明见 [应用指南](face_compare_system/README.md)，文档索引见 [docs](docs/README.md)。

@@ -110,7 +110,7 @@ SQLite后端采用事务、模型签名/维数校验、同名约束和版本化�
 
 ## 源码与来源
 
-`deep_engine.py`是深度检测/对齐/特征，`enrollment.py`是录入和连续性，`worker.py`负责后台队列，`evaluation.py`负责独立评估；其余配置、数据、界面、业务、质量、日志职责仍分离。历史文档保留在docs/，当前操作以本README及根目录操作手册为准。
+`deep_engine.py`是深度检测/对齐/特征，`enrollment.py`是录入和连续性，`worker.py`负责后台队列，`evaluation.py`负责独立评估；其余配置、数据、界面、业务、质量、日志职责仍分离。历史文档保留在docs/，当前操作以本README为准。
 
 - [OpenCV检测与识别教程](https://docs.opencv.org/4.x/d0/dd4/tutorial_dnn_face.html)
 - [YuNet官方模型](https://github.com/opencv/opencv_zoo/tree/main/models/face_detection_yunet)

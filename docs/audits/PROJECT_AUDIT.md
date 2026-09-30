@@ -1,6 +1,6 @@
 # 人脸识别项目算法审计（代码现状）
 
-> 本文保留 2026-09-25 的**改造前审计基线**，不代表当前待办。2026-09-26 的 P0 软件验收与尚缺的数据证据见 [P0 验收清单](face_research/P0_ACCEPTANCE.md)；后续目标仍以 [改造计划](IMPROVEMENT_PLAN.md) 为准。
+> 本文保留 2026-09-25 的**改造前审计基线**，不代表当前待办。2026-09-26 的 P0 软件验收与尚缺的数据证据见 [P0 验收清单](../../face_research/P0_ACCEPTANCE.md)；后续目标仍以 [改造计划](../planning/IMPROVEMENT_PLAN.md) 为准。
 
 审计日期：2026-09-25。范围：`face_compare_system/` 的应用、识别、数据库、静态/视频评估和测试，以及同级 `face_research/` 的选样实验与测试。本文件描述**已经实现且由代码可证实**的行为，不把工程设计或合成测试当作真实人群效果。此轮只做审计，不改变程序。
 
@@ -21,7 +21,7 @@
                  → 稳定身份/未知、叠加画框与 UI 展示
 ```
 
-证据：[`ui.py`](face_compare_system/face_compare/ui.py)、[`worker.py`](face_compare_system/face_compare/worker.py)、[`service.py`](face_compare_system/face_compare/service.py)、[`deep_engine.py`](face_compare_system/face_compare/deep_engine.py)、[`recognizer.py`](face_compare_system/face_compare/recognizer.py)、[`tracking.py`](face_compare_system/face_compare/tracking.py)。主配置是 [`config.json`](face_compare_system/config.json) 的 `sface` + `sqlite`；`Haar + U2-LBPH` 是保留的基线分支，不是当前默认路径。
+证据：[`ui.py`](../../face_compare_system/face_compare/ui.py)、[`worker.py`](../../face_compare_system/face_compare/worker.py)、[`service.py`](../../face_compare_system/face_compare/service.py)、[`deep_engine.py`](../../face_compare_system/face_compare/deep_engine.py)、[`recognizer.py`](../../face_compare_system/face_compare/recognizer.py)、[`tracking.py`](../../face_compare_system/face_compare/tracking.py)。主配置是 [`config.json`](../../face_compare_system/config.json) 的 `sface` + `sqlite`；`Haar + U2-LBPH` 是保留的基线分支，不是当前默认路径。
 
 | 环节 | 当前实现与边界 |
 | --- | --- |
@@ -44,9 +44,9 @@ c = 1 - 2d
 ‖x-y‖²₂ = 2 - 2c = 4d        （仅对单位向量成立）
 ```
 
-依据：[`deep_engine.py`](face_compare_system/face_compare/deep_engine.py) 的 `extract()` / `distance()`，以及 [`vector_database.py`](face_compare_system/face_compare/vector_database.py) 的矩阵检索。OpenCV [YuNet + SFace 官方教程](https://docs.opencv.org/4.9.0/d0/dd4/tutorial_dnn_face.html) 使用 `FaceRecognizerSF_FR_COSINE` 返回**余弦相似度（越大越像）**，也展示 `FR_NORM_L2`；教程的 `0.363` 是其示例数据集的余弦相似度阈值，不能直接与本项目的 `0.275` 比大小，更不能当成此项目校准结果。
+依据：[`deep_engine.py`](../../face_compare_system/face_compare/deep_engine.py) 的 `extract()` / `distance()`，以及 [`vector_database.py`](../../face_compare_system/face_compare/vector_database.py) 的矩阵检索。OpenCV [YuNet + SFace 官方教程](https://docs.opencv.org/4.9.0/d0/dd4/tutorial_dnn_face.html) 使用 `FaceRecognizerSF_FR_COSINE` 返回**余弦相似度（越大越像）**，也展示 `FR_NORM_L2`；教程的 `0.363` 是其示例数据集的余弦相似度阈值，不能直接与本项目的 `0.275` 比大小，更不能当成此项目校准结果。
 
-主配置的 `engine.cosine_threshold=0.45` 在 [`service.py`](face_compare_system/face_compare/service.py) 转成 `τ=(1-0.45)/2=0.275`；`engine.cosine_margin=0.08` 转成距离间隔 `m=0.04`。当前实际判定（等号接受）是：
+主配置的 `engine.cosine_threshold=0.45` 在 [`service.py`](../../face_compare_system/face_compare/service.py) 转成 `τ=(1-0.45)/2=0.275`；`engine.cosine_margin=0.08` 转成距离间隔 `m=0.04`。当前实际判定（等号接受）是：
 
 ```text
 d_i = median(smallest min(3, N_i) distances to identity i)
@@ -59,7 +59,7 @@ Known(i*) ⇔ d₁ ≤ τ  且  (不存在 d₂ 或 d₂ - d₁ ≥ m)
 
 ## 3. 多模板聚合：现状与待验证假设
 
-生产库与研究版分别在 [`vector_database.py`](face_compare_system/face_compare/vector_database.py)、[`recognizer.py`](face_compare_system/face_compare/recognizer.py)、[`face_research/selection.py`](face_research/selection.py) 实现“最近 K 个距离的中位数”；二者有一致性测试，但没有一个可配置、共享的聚合策略接口。`K=3` 时是三个最近值的第二小值；`N=1` 时退化成单模板距离，`N=2` 时两数中位数等于其均值。
+生产库与研究版分别在 [`vector_database.py`](../../face_compare_system/face_compare/vector_database.py)、[`recognizer.py`](../../face_compare_system/face_compare/recognizer.py)、[`face_research/selection.py`](../../face_research/selection.py) 实现“最近 K 个距离的中位数”；二者有一致性测试，但没有一个可配置、共享的聚合策略接口。`K=3` 时是三个最近值的第二小值；`N=1` 时退化成单模板距离，`N=2` 时两数中位数等于其均值。
 
 | 策略 | 优点 | 主要代价 / 风险 |
 | --- | --- | --- |
@@ -73,7 +73,7 @@ Known(i*) ⇔ d₁ ≤ τ  且  (不存在 d₂ 或 d₂ - d₁ ≥ m)
 
 ## 4. 多脸跟踪与时序：按实际代码描述的状态机
 
-[`tracking.py`](face_compare_system/face_compare/tracking.py) 先筛选轨迹—观测边：中心距离不得超过框尺度的 `1.5` 倍；双方有特征时半余弦距离不超过 `0.25`，用 `0.75×特征距离 + 0.25×(1-IoU)/2` 排序；特征缺失时要求 `IoU≥0.3`。若轨迹端或观测端出现距离差小于 `0.025` 的近并列候选，宁可新建轨迹也不继承旧身份；其余按代价贪心一对一关联。超过 `0.9 s` 未更新会删除轨迹，时间戳倒退会重置全部轨迹；最多 32 条活跃轨迹。它是保守的 CPU 基线，不是已验证的 MOT 算法。
+[`tracking.py`](../../face_compare_system/face_compare/tracking.py) 先筛选轨迹—观测边：中心距离不得超过框尺度的 `1.5` 倍；双方有特征时半余弦距离不超过 `0.25`，用 `0.75×特征距离 + 0.25×(1-IoU)/2` 排序；特征缺失时要求 `IoU≥0.3`。若轨迹端或观测端出现距离差小于 `0.025` 的近并列候选，宁可新建轨迹也不继承旧身份；其余按代价贪心一对一关联。超过 `0.9 s` 未更新会删除轨迹，时间戳倒退会重置全部轨迹；最多 32 条活跃轨迹。它是保守的 CPU 基线，不是已验证的 MOT 算法。
 
 代码没有显式 `UNCONFIRMED → CANDIDATE → CONFIRMED → LOST` 枚举，真实状态可概括为：
 
@@ -93,10 +93,10 @@ Known(i*) ⇔ d₁ ≤ τ  且  (不存在 d₂ 或 d₂ - d₁ ≥ m)
 
 | 项目 | 已有能力 | 仍缺的算法证据 |
 | --- | --- | --- |
-| 静态开放集评估 | [`evaluation.py`](face_compare_system/face_compare/evaluation.py) 支持 `validation/test` 清单、临时隔离库、精确解码图/对齐裁剪去重；报告已知正确/拒绝/错认、未知误接受（全部尝试与可用脸两个分母）、Wilson 95% 区间、条件分组和粗粒度延迟。 | 没有成对 verification 样本协议、ROC/AUC/FAR/FRR/TAR@FAR；没有统一输出所需曲线与 CSV；静态评估不测多脸时序效果。 |
-| 阈值选择 | [`operating_point.py`](face_compare_system/face_compare/operating_point.py) 只允许验证集、固定当前 margin 扫阈值、按经验 FPIR 目标选点，输出建议 `engine.cosine_threshold`，不直接改配置；[`face_research/experiment.py`](face_research/experiment.py) 也对每种选样方法只在验证集选 `τ`。 | 未联合选择 `τ,m`；没有独立的验证 pair ROC；“经验 FPIR 达标”不等于低误接率的统计保证。主程序 SFace 仍使用配置固定阈值，不自动应用研究标定结果。 |
-| 有限模板选样 | [`face_research/selection.py`](face_research/selection.py) 已有 First-K、固定种子的 Random、质量、差异性、质量+覆盖+身份一致性五种方法；相同 SFace 特征、预算与匹配公式，按条件输出结果与配对差值。 | 单次命令只评一个 K，Random 只用一个 seed；没有 K=1/2/3/5 全矩阵与置信区间/重复实验；proposed 的常数是人工设定，优于基线尚无可引述的真实数据。 |
-| 视频评估 | [`video.py`](face_compare_system/face_compare/video.py) 可导出帧/轨迹结果，[`video_evaluation.py`](face_compare_system/face_compare/video_evaluation.py) 对带真值视频报告检测召回、未匹配检测、身份切换、首次正确所需时间等。 | 尚无独立标注、多人物理场景与拍摄条件覆盖的结果；视频帧相关性使逐帧区间不能视为独立样本置信度。 |
+| 静态开放集评估 | [`evaluation.py`](../../face_compare_system/face_compare/evaluation.py) 支持 `validation/test` 清单、临时隔离库、精确解码图/对齐裁剪去重；报告已知正确/拒绝/错认、未知误接受（全部尝试与可用脸两个分母）、Wilson 95% 区间、条件分组和粗粒度延迟。 | 没有成对 verification 样本协议、ROC/AUC/FAR/FRR/TAR@FAR；没有统一输出所需曲线与 CSV；静态评估不测多脸时序效果。 |
+| 阈值选择 | [`operating_point.py`](../../face_compare_system/face_compare/operating_point.py) 只允许验证集、固定当前 margin 扫阈值、按经验 FPIR 目标选点，输出建议 `engine.cosine_threshold`，不直接改配置；[`face_research/experiment.py`](../../face_research/experiment.py) 也对每种选样方法只在验证集选 `τ`。 | 未联合选择 `τ,m`；没有独立的验证 pair ROC；“经验 FPIR 达标”不等于低误接率的统计保证。主程序 SFace 仍使用配置固定阈值，不自动应用研究标定结果。 |
+| 有限模板选样 | [`face_research/selection.py`](../../face_research/selection.py) 已有 First-K、固定种子的 Random、质量、差异性、质量+覆盖+身份一致性五种方法；相同 SFace 特征、预算与匹配公式，按条件输出结果与配对差值。 | 单次命令只评一个 K，Random 只用一个 seed；没有 K=1/2/3/5 全矩阵与置信区间/重复实验；proposed 的常数是人工设定，优于基线尚无可引述的真实数据。 |
+| 视频评估 | [`video.py`](../../face_compare_system/face_compare/video.py) 可导出帧/轨迹结果，[`video_evaluation.py`](../../face_compare_system/face_compare/video_evaluation.py) 对带真值视频报告检测召回、未匹配检测、身份切换、首次正确所需时间等。 | 尚无独立标注、多人物理场景与拍摄条件覆盖的结果；视频帧相关性使逐帧区间不能视为独立样本置信度。 |
 | 性能 | 现有报告有整体单图耗时、研究选样耗时；SQLite 使用向量化精确匹配和缓存。 | 无 YuNet/对齐/SFace/检索/端到端分阶段基准，也未量化 1 人/多人及 10/100/1000 身份规模；暂不能判断 FAISS 是否必要。 |
 | 回归测试 | 2026-09-25 运行 `pytest -q face_compare_system/tests face_research/tests -p no:cacheprovider`：**170 passed**。测试覆盖阈值、歧义、投票、轨迹交叉、质量、数据库事务与研究分割校验。 | 这不能替代真实人员、设备、眼镜条件下的准确率测量；聚合策略、联合标定、ROC 计算和分阶段 benchmark 尚未有对应测试。 |
 
@@ -110,4 +110,4 @@ Known(i*) ⇔ d₁ ≤ τ  且  (不存在 d₂ 或 d₂ - d₁ ≥ m)
 
 已可据代码说明：本地 YuNet+SFace 多脸开放集识别系统、五点对齐和显式归一化、质量门控、SQLite 多模板库、距离阈值+歧义间隔、轨迹级时序确认、有限模板选样五策略基线、隔离验证/测试的初版研究框架和 170 项回归测试。
 
-尚**不能**写“误识率降低 X%”“达到 FAR 1e-3”“眼镜条件鲁棒性显著提高”“优于 ArcFace/FAISS”或“自研最优算法”：目前没有足够的独立真人数据、对应协议或对照结果。最有价值的下一步是把现有机制变成**可复现、可反驳**的算法实验，而不是立即换模型；具体执行与风险见 [`IMPROVEMENT_PLAN.md`](IMPROVEMENT_PLAN.md)。
+尚**不能**写“误识率降低 X%”“达到 FAR 1e-3”“眼镜条件鲁棒性显著提高”“优于 ArcFace/FAISS”或“自研最优算法”：目前没有足够的独立真人数据、对应协议或对照结果。最有价值的下一步是把现有机制变成**可复现、可反驳**的算法实验，而不是立即换模型；具体执行与风险见 [`IMPROVEMENT_PLAN.md`](../planning/IMPROVEMENT_PLAN.md)。

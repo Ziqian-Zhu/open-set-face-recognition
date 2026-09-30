@@ -35,4 +35,4 @@ Python · OpenCV · NumPy · SQLite · Open-set Recognition
 | 精确检索性能优化 | `exact-retrieval-paired-20260926-01`；`P2_RETRIEVAL_RESULTS.md` | 准确率提升；整个识别应用快 33 倍；已做 FAISS 比较 |
 | 时序配对能力 | `video_evaluation.py`、`test_video_evaluation.py` | 已证明真实交叉遮挡场景收益 |
 
-run ID 均位于 `face_research/results/`。完整结果与分母见 [P1_RESULTS.md](face_research/P1_RESULTS.md)，逐题答辩见 [INTERVIEW.md](INTERVIEW.md)。输出展示以聚合统计为主，面试时不要直接提供原图、embedding 或私人数据库。
+run ID 均位于 `face_research/results/`。完整结果与分母见 [P1_RESULTS.md](../../face_research/P1_RESULTS.md)，逐题答辩见 [INTERVIEW.md](INTERVIEW.md)。输出展示以聚合统计为主，面试时不要直接提供原图、embedding 或私人数据库。
